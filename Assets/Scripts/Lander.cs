@@ -10,10 +10,6 @@ public class Lander : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
-        Debug.Log(Vector2.Dot(new Vector2(0, 1), new Vector2(0, 1))); //same direction
-        Debug.Log(Vector2.Dot(new Vector2(0, 1), new Vector2(0.5f,0.5f))); //45 degree
-        Debug.Log(Vector2.Dot(new Vector2(0, 1), new Vector2(1,0)));    //90 degree
-        Debug.Log(Vector2.Dot(new Vector2(0, 1), new Vector2(0, -1)));   //opposite direction
     }
     private void FixedUpdate()
     {
@@ -42,7 +38,17 @@ public class Lander : MonoBehaviour
             Debug.Log("Crash");
             return;
         }
-        else { Debug.Log("Soft Landing"); }
+        //we are going to compare the dot product of Global Vector & Local Vector(of the gameObject).
+        float dotVector = Vector2.Dot(Vector2.up, transform.up);
+        //Debug.Log(dotVector);
+        float minDotVector = 1f;
+        if (dotVector < minDotVector)
+        {
+            //landed on a steep angle
+            Debug.Log("Landing Angle is too steep");
+            return;
+        }
+        Debug.Log("Soft Landing"); 
     }
 
 }
