@@ -45,6 +45,7 @@ public class Lander : MonoBehaviour
         if (dotVector < minDotVector)
         {
             //landed on a steep angle
+            //
             Debug.Log("Landing Angle is too steep");
             return;
         }
