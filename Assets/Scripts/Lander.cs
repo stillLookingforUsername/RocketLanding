@@ -31,6 +31,11 @@ public class Lander : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D other)
     {
+        if (!other.gameObject.TryGetComponent(out LandingPad landingPad))
+        {
+            Debug.Log("Crash Land");
+            return;
+        }
         float softLandingVelocityMagnitude = 4f;
         if (other.relativeVelocity.magnitude > softLandingVelocityMagnitude)
         {
@@ -41,11 +46,10 @@ public class Lander : MonoBehaviour
         //we are going to compare the dot product of Global Vector & Local Vector(of the gameObject).
         float dotVector = Vector2.Dot(Vector2.up, transform.up);
         //Debug.Log(dotVector);
-        float minDotVector = 1f;
+        float minDotVector = 0.9f;
         if (dotVector < minDotVector)
         {
             //landed on a steep angle
-            //
             Debug.Log("Landing Angle is too steep");
             return;
         }
