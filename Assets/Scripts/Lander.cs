@@ -23,18 +23,18 @@ public class Lander : MonoBehaviour
     //Or u want the fuel Consumption to be at a specific rate no matter how many buttons u press(like even if u press up and left at the same time it will consume only 1f(1 ltr) at a time)
     private void FixedUpdate()
     {
+
         Debug.Log("FuelAmount: " + fuelAmount);
+        OnBeforeForce?.Invoke(this, EventArgs.Empty);
         if (fuelAmount <= 0f)
         {
             //No fuel
             return;
         }
-
         if (Keyboard.current.upArrowKey.isPressed || Keyboard.current.leftArrowKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
         {
             FuelConsumption();
         }
-        OnBeforeForce?.Invoke(this, EventArgs.Empty);
         if (Keyboard.current.upArrowKey.isPressed)
         {
             float force = 700f;
@@ -95,6 +95,18 @@ public class Lander : MonoBehaviour
         Debug.Log("Score: " + score);
     }
 
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.TryGetComponent(out FuelPickUp fuelPickup))
+        {
+            float addFuelAmt = 10f;
+            fuelAmount += addFuelAmt;
+            //dont destroy the other fuelGameObejct here - the specific gameObect should be responsible for destroying itself
+            //clean Code method - define destroySelf function in that gameObject's script and call it from here
+            fuelPickup.DestroySelf();
+        }
+    }
     //Optional - use parameter to dictate how much fuel to be consumed
     //private void FuelConsumption(int consumptionAmt)
     private void FuelConsumption()
