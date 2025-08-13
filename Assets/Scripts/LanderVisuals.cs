@@ -2,6 +2,8 @@ using System;
 using TMPro;
 using UnityEngine;
 
+//even if we delete this script it won't affect the LaderScript
+
 public class LanderVisuals : MonoBehaviour
 {
     //this scripts is only for visual,i didn't use logic here so this script needs to be manipulate using Events
@@ -51,9 +53,9 @@ public class LanderVisuals : MonoBehaviour
         SetEnableThrusterParticleSystem(RightThrusterParticles, true);
     }
 
-    private void SetEnableThrusterParticleSystem(ParticleSystem particleSystem,bool enabled)
+    private void SetEnableThrusterParticleSystem(ParticleSystem particleSystem, bool enabled)
     {
-        ParticleSystem.EmissionModule emissionModule =  particleSystem.emission;
+        ParticleSystem.EmissionModule emissionModule = particleSystem.emission;
         emissionModule.enabled = enabled;
     }
 }

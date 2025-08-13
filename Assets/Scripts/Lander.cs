@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
-[RequireComponent(typeof(Rigidbody2D),typeof(BoxCollider2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D))]
 public class Lander : MonoBehaviour
 {
     public event EventHandler OnUpForce;
@@ -13,6 +13,8 @@ public class Lander : MonoBehaviour
     public event EventHandler OnRightForce;
     public event EventHandler OnBeforeForce;
     private Rigidbody2D _rb;
+
+    private float fuelAmount = 10f;
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -24,18 +26,21 @@ public class Lander : MonoBehaviour
         {
             float force = 700f;
             _rb.AddForce(force * transform.up * Time.deltaTime); //we don't need deltaTime in fixedUpdate but just for unexpected error used it
+            FuelConsumption(); //can use parameter to add how much fuel to consume while using different movement
             OnUpForce?.Invoke(this, EventArgs.Empty);
         }
         if (Keyboard.current.leftArrowKey.isPressed)
         {
             float turnSpeed = 200f;
             _rb.AddTorque(turnSpeed * Time.deltaTime);
+            FuelConsumption();
             OnLeftForce?.Invoke(this, EventArgs.Empty);
         }
         if (Keyboard.current.rightArrowKey.isPressed)
         {
             float turnSpeed = -200f;
             _rb.AddTorque(turnSpeed * Time.deltaTime);
+            FuelConsumption();
             OnRightForce?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -78,6 +83,12 @@ public class Lander : MonoBehaviour
 
         int score = Mathf.RoundToInt(landingAngleScore + landingSpeedScore) * landingPad.GetScoreMultiplier();
         Debug.Log("Score: " + score);
+    }
+
+    private void FuelConsumption()
+    {
+        float fuelConsumptionAmt = 1f;
+        fuelAmount -= fuelConsumptionAmt * Time.deltaTime;   //avoid using magic numbers
     }
 
 }
