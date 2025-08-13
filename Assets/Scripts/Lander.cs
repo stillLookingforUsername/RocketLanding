@@ -1,11 +1,17 @@
+using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Rigidbody2D),typeof(BoxCollider2D))]
 public class Lander : MonoBehaviour
 {
+    public event EventHandler OnUpForce;
+    public event EventHandler OnLeftForce;
+    public event EventHandler OnRightForce;
+    public event EventHandler OnBeforeForce;
     private Rigidbody2D _rb;
     private void Awake()
     {
@@ -13,20 +19,24 @@ public class Lander : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        OnBeforeForce?.Invoke(this, EventArgs.Empty);
         if (Keyboard.current.upArrowKey.isPressed)
         {
             float force = 700f;
             _rb.AddForce(force * transform.up * Time.deltaTime); //we don't need deltaTime in fixedUpdate but just for unexpected error used it
+            OnUpForce?.Invoke(this, EventArgs.Empty);
         }
         if (Keyboard.current.leftArrowKey.isPressed)
         {
             float turnSpeed = 200f;
             _rb.AddTorque(turnSpeed * Time.deltaTime);
+            OnLeftForce?.Invoke(this, EventArgs.Empty);
         }
         if (Keyboard.current.rightArrowKey.isPressed)
         {
             float turnSpeed = -200f;
             _rb.AddTorque(turnSpeed * Time.deltaTime);
+            OnRightForce?.Invoke(this, EventArgs.Empty);
         }
     }
     private void OnCollisionEnter2D(Collision2D other)
