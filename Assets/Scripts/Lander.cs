@@ -19,28 +19,38 @@ public class Lander : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
     }
+    //An interesting gameDesign question - do u want the fuel to be consumtion to be double(like it will be decremented twice when u press 2 buttons like up and left at the same time)
+    //Or u want the fuel Consumption to be at a specific rate no matter how many buttons u press(like even if u press up and left at the same time it will consume only 1f(1 ltr) at a time)
     private void FixedUpdate()
     {
+        Debug.Log("FuelAmount: " + fuelAmount);
+        if (fuelAmount <= 0f)
+        {
+            //No fuel
+            return;
+        }
+
+        if (Keyboard.current.upArrowKey.isPressed || Keyboard.current.leftArrowKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+        {
+            FuelConsumption();
+        }
         OnBeforeForce?.Invoke(this, EventArgs.Empty);
         if (Keyboard.current.upArrowKey.isPressed)
         {
             float force = 700f;
             _rb.AddForce(force * transform.up * Time.deltaTime); //we don't need deltaTime in fixedUpdate but just for unexpected error used it
-            FuelConsumption(); //can use parameter to add how much fuel to consume while using different movement
             OnUpForce?.Invoke(this, EventArgs.Empty);
         }
         if (Keyboard.current.leftArrowKey.isPressed)
         {
             float turnSpeed = 200f;
             _rb.AddTorque(turnSpeed * Time.deltaTime);
-            FuelConsumption();
             OnLeftForce?.Invoke(this, EventArgs.Empty);
         }
         if (Keyboard.current.rightArrowKey.isPressed)
         {
             float turnSpeed = -200f;
             _rb.AddTorque(turnSpeed * Time.deltaTime);
-            FuelConsumption();
             OnRightForce?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -85,6 +95,8 @@ public class Lander : MonoBehaviour
         Debug.Log("Score: " + score);
     }
 
+    //Optional - use parameter to dictate how much fuel to be consumed
+    //private void FuelConsumption(int consumptionAmt)
     private void FuelConsumption()
     {
         float fuelConsumptionAmt = 1f;
