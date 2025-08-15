@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -8,15 +9,25 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D))]
 public class Lander : MonoBehaviour
 {
+    public static Lander Instance { get; private set; }
     public event EventHandler OnUpForce;
     public event EventHandler OnLeftForce;
     public event EventHandler OnRightForce;
     public event EventHandler OnBeforeForce;
+    public event EventHandler OnCoinPickUp;
+    public event EventHandler<OnLandedEventArgs> OnLanded;
+    public class OnLandedEventArgs : EventArgs
+    {
+        public int score;
+    }
     private Rigidbody2D _rb;
 
     private float fuelAmount = 10f;
+    private float fuelAmountMax = 10f;
     private void Awake()
     {
+        Instance = this;
+        fuelAmount = fuelAmountMax;
         _rb = GetComponent<Rigidbody2D>();
     }
     //An interesting gameDesign question - do u want the fuel to be consumtion to be double(like it will be decremented twice when u press 2 buttons like up and left at the same time)
@@ -93,6 +104,7 @@ public class Lander : MonoBehaviour
 
         int score = Mathf.RoundToInt(landingAngleScore + landingSpeedScore) * landingPad.GetScoreMultiplier();
         Debug.Log("Score: " + score);
+        OnLanded?.Invoke(this, new OnLandedEventArgs { score = score, });
     }
 
 
@@ -104,9 +116,22 @@ public class Lander : MonoBehaviour
             fuelAmount += addFuelAmt;
             //dont destroy the other fuelGameObejct here - the specific gameObect should be responsible for destroying itself
             //clean Code method - define destroySelf function in that gameObject's script and call it from here
+            if (fuelAmount > fuelAmountMax)
+            {
+                //fuel will go up only till max it won't keep on incrementing
+                fuelAmount = fuelAmountMax;
+            }
             fuelPickup.DestroySelf();
         }
+
+        if (other.gameObject.TryGetComponent(out CoinPickUp coinPickUp))
+        {
+            OnCoinPickUp?.Invoke(this, EventArgs.Empty);
+            coinPickUp.DestroySelf();
+        }
+
     }
+
     //Optional - use parameter to dictate how much fuel to be consumed
     //private void FuelConsumption(int consumptionAmt)
     private void FuelConsumption()
@@ -115,4 +140,20 @@ public class Lander : MonoBehaviour
         fuelAmount -= fuelConsumptionAmt * Time.deltaTime;   //avoid using magic numbers
     }
 
+    public float GetSpeedX()
+    {
+        return _rb.linearVelocityX;
+    }
+    public float GetSpeedY()
+    {
+        return _rb.linearVelocityY;
+    }
+    public float GetFuelAmountNormalize()
+    {
+        return fuelAmount / fuelAmountMax;
+    }
+    public float GetFuel()
+    {
+        return fuelAmount;
+    }
 }
