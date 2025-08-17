@@ -28,8 +28,6 @@ public class StatsUI : MonoBehaviour
         statsTextMesh.text = GameManager.Instance.GetScore() + "\n" +
             Mathf.Round(GameManager.Instance.GetTime()) + "\n" +
             Mathf.Abs(Mathf.Round(Lander.Instance.GetSpeedX() * 10f)) + "\n" +
-            Mathf.Abs(Mathf.Round(Lander.Instance.GetSpeedY() * 10f)) + "\n" +
-            Lander.Instance.GetFuel();
-
+            Mathf.Abs(Mathf.Round(Lander.Instance.GetSpeedY() * 10f));
     }
 }
