@@ -34,6 +34,7 @@ public class LandedUI : MonoBehaviour
         {
             titleTextMesh.text = "<color=#ff0000>CRASH!</color>";
         }
+        //the value is too small so we multiply e.landingSpeed & e.dotVecot with offset 2f and 100f respectively
         statsTextMesh.text =
             Mathf.Round(e.landingSpeed * 2f) + "\n" +
             Mathf.Round(e.dotVector * 100f) + "\n" +

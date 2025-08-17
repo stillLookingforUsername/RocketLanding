@@ -9,6 +9,7 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D))]
 public class Lander : MonoBehaviour
 {
+    private const float GRAVITY_NORMAL = 0.7f;
     public static Lander Instance { get; private set; }
     public event EventHandler OnUpForce;
     public event EventHandler OnLeftForce;
@@ -32,15 +33,26 @@ public class Lander : MonoBehaviour
         TooSteepAngle,
         TooFastLanding,
     }
+    //First we need some enum to define all the State
+    public enum State
+    {
+        WaitingToStart,
+        Normal,
+    }
     private Rigidbody2D _rb;
 
     private float fuelAmount = 10f;
     private float fuelAmountMax = 10f;
+    private State state; //field for our currentState
     private void Awake()
     {
         Instance = this;
         fuelAmount = fuelAmountMax;
+        //default State to WaitingToStart
+        state = State.WaitingToStart;
         _rb = GetComponent<Rigidbody2D>();
+        _rb.gravityScale = 0f;
+
     }
     //An interesting gameDesign question - do u want the fuel to be consumtion to be double(like it will be decremented twice when u press 2 buttons like up and left at the same time)
     //Or u want the fuel Consumption to be at a specific rate no matter how many buttons u press(like even if u press up and left at the same time it will consume only 1f(1 ltr) at a time)
@@ -49,32 +61,47 @@ public class Lander : MonoBehaviour
 
         Debug.Log("FuelAmount: " + fuelAmount);
         OnBeforeForce?.Invoke(this, EventArgs.Empty);
-        if (fuelAmount <= 0f)
+        switch (state)
         {
-            //No fuel
-            return;
-        }
-        if (Keyboard.current.upArrowKey.isPressed || Keyboard.current.leftArrowKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
-        {
-            FuelConsumption();
-        }
-        if (Keyboard.current.upArrowKey.isPressed)
-        {
-            float force = 700f;
-            _rb.AddForce(force * transform.up * Time.deltaTime); //we don't need deltaTime in fixedUpdate but just for unexpected error used it
-            OnUpForce?.Invoke(this, EventArgs.Empty);
-        }
-        if (Keyboard.current.leftArrowKey.isPressed)
-        {
-            float turnSpeed = 200f;
-            _rb.AddTorque(turnSpeed * Time.deltaTime);
-            OnLeftForce?.Invoke(this, EventArgs.Empty);
-        }
-        if (Keyboard.current.rightArrowKey.isPressed)
-        {
-            float turnSpeed = -200f;
-            _rb.AddTorque(turnSpeed * Time.deltaTime);
-            OnRightForce?.Invoke(this, EventArgs.Empty);
+            default:
+            case State.WaitingToStart:
+                if (Keyboard.current.upArrowKey.isPressed || Keyboard.current.leftArrowKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+                {
+                    //press anyInput
+                    _rb.gravityScale = GRAVITY_NORMAL;
+                    state = State.Normal;
+                }
+                break;
+            case State.Normal:
+                    if (fuelAmount <= 0f)
+                    {
+                        //No fuel
+                        return;
+                    }
+                    if (Keyboard.current.upArrowKey.isPressed || Keyboard.current.leftArrowKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+                    {
+                        //press anyInput
+                        FuelConsumption();
+                    }
+                    if (Keyboard.current.upArrowKey.isPressed)
+                    {
+                        float force = 700f;
+                        _rb.AddForce(force * transform.up * Time.deltaTime); //we don't need deltaTime in fixedUpdate but just for unexpected error used it
+                        OnUpForce?.Invoke(this, EventArgs.Empty);
+                    }
+                    if (Keyboard.current.leftArrowKey.isPressed)
+                    {
+                        float turnSpeed = 200f;
+                        _rb.AddTorque(turnSpeed * Time.deltaTime);
+                        OnLeftForce?.Invoke(this, EventArgs.Empty);
+                    }
+                    if (Keyboard.current.rightArrowKey.isPressed)
+                    {
+                        float turnSpeed = -200f;
+                        _rb.AddTorque(turnSpeed * Time.deltaTime);
+                        OnRightForce?.Invoke(this, EventArgs.Empty);
+                    }
+                break;
         }
     }
     private void OnCollisionEnter2D(Collision2D other)
