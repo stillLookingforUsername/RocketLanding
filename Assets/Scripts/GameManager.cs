@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
                 Lander.Instance.transform.position = spawnGameLevel.GetLevelStartPosition();
             }
         }
-        
+
     }
 
     private void Update()
@@ -90,5 +90,9 @@ public class GameManager : MonoBehaviour
     public void RetryLevel()
     {
         SceneManager.LoadScene(0);
+    }
+    public int GetLevelNumber()
+    {
+        return _levelNumber;
     }
 }
