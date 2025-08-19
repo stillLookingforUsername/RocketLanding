@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1303770372375790056}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -14.3, y: 7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -123,8 +123,8 @@ SpriteShapeRenderer:
   - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
   - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
   m_LocalAABB:
-    m_Center: {x: 2.5599995, y: 0.19000006, z: 0}
-    m_Extent: {x: 14.5, y: 7.000001, z: 0}
+    m_Center: {x: 2.5599985, y: 0.69000006, z: 0}
+    m_Extent: {x: 14.5, y: 7.500001, z: 0}
   m_SpriteSortPoint: 0
 --- !u!114 &8997125606956290481
 MonoBehaviour:
@@ -157,7 +157,15 @@ MonoBehaviour:
       spriteIndex: 0
       corner: 1
       m_CornerMode: 1
-    - position: {x: -11.445343, y: 4.671632, z: 0}
+    - position: {x: -11.940001, y: 8.190001, z: 0}
+      leftTangent: {x: 0, y: 0, z: 0}
+      rightTangent: {x: 0, y: 0, z: 0}
+      mode: 0
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: -5.94, y: 8.190001, z: 0}
       leftTangent: {x: 0, y: 0, z: 0}
       rightTangent: {x: 0, y: 0, z: 0}
       mode: 0
@@ -260,7 +268,8 @@ MonoBehaviour:
   m_ColliderSegment:
   - {x: -6.94, y: -5.81}
   - {x: -11.940001, y: -1.81}
-  - {x: -11.445343, y: 4.671632}
+  - {x: -11.940001, y: 8.190001}
+  - {x: -5.94, y: 8.190001}
   - {x: 2, y: 1}
   - {x: 4.06, y: -0.80999994}
   - {x: 8.059999, y: -0.80999994}
@@ -320,7 +329,8 @@ PolygonCollider2D:
     m_Paths:
     - - {x: -6.94, y: -5.81}
       - {x: -11.940001, y: -1.81}
-      - {x: -11.445343, y: 4.671632}
+      - {x: -11.940001, y: 8.190001}
+      - {x: -5.94, y: 8.190001}
       - {x: 2, y: 1}
       - {x: 4.06, y: -0.80999994}
       - {x: 8.059999, y: -0.80999994}
@@ -343,7 +353,7 @@ GameObject:
   - component: {fileID: 8564999304762944572}
   - component: {fileID: -6306425577048820134}
   m_Layer: 0
-  m_Name: Level1
+  m_Name: Level 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -382,7 +392,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2eb94ef0d4d0bc94d835e0d2ca44e890, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _levelNumber: 1
+  _levelNumber: 2
   _landerStartPositionTransform: {fileID: 2304584328506217702}
 --- !u!1001 &517831881578313625
 PrefabInstance:

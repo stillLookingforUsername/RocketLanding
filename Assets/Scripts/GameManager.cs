@@ -1,12 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [SerializeField] private int _levelNumber;
+    //[SerializeField]private int _levelNumber;
+    private static int _levelNumber = 1;
+    //private static int _levelNumber; //this is one of the problem why the level was not loading cuz we didn't initialize the value and it take random number which is not valid
+
+    //public static int _levelNumber;
     [SerializeField] private List<GameLevel> _gameLevelList; //to keep track of levels
 
     private int score;
@@ -23,6 +28,7 @@ public class GameManager : MonoBehaviour
         Lander.Instance.OnCoinPickUp += Lander_OnCoinPickUp;
         Lander.Instance.OnLanded += Lander_OnLanded;
         Lander.Instance.OnStateChanged += Lander_OnStateChanged;
+
         LoadCurrentLevel();
     }
 
@@ -40,6 +46,7 @@ public class GameManager : MonoBehaviour
                 Lander.Instance.transform.position = spawnGameLevel.GetLevelStartPosition();
             }
         }
+        
     }
 
     private void Update()
@@ -74,5 +81,14 @@ public class GameManager : MonoBehaviour
     public float GetTime()
     {
         return time;
+    }
+    public void GoToNextLevel()
+    {
+        _levelNumber++;
+        SceneManager.LoadScene(0);
+    }
+    public void RetryLevel()
+    {
+        SceneManager.LoadScene(0);
     }
 }

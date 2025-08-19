@@ -8,12 +8,14 @@ public class LandedUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI titleTextMesh;
     [SerializeField] private TextMeshProUGUI statsTextMesh;
+    [SerializeField] private TextMeshProUGUI _nextButtonTextMesh;
     [SerializeField] private Button nextButton;
+    private Action _nextButtonClickAction;
 
     //since this button is local to this Object we implement on Awake
     private void Awake()
     {
-        nextButton.onClick.AddListener(() => { SceneManager.LoadScene(0); }); //here we are listening to mouse click with code instead of using drag&drop in inspector
+        nextButton.onClick.AddListener(() => { _nextButtonClickAction(); }); //here we are listening to mouse click with code instead of using drag&drop in inspector
     }
     /*
     private void Awake()
@@ -37,10 +39,14 @@ public class LandedUI : MonoBehaviour
         if (e.landingType == Lander.LandingType.Success)
         {
             titleTextMesh.text = "SUCCESSFUL";
+            _nextButtonTextMesh.text = "CONTINUE";
+            _nextButtonClickAction = GameManager.Instance.GoToNextLevel;
         }
         else
         {
             titleTextMesh.text = "<color=#ff0000>CRASH!</color>";
+            _nextButtonTextMesh.text = "RETRY";
+            _nextButtonClickAction = GameManager.Instance.RetryLevel;
         }
         //the value is too small so we multiply e.landingSpeed & e.dotVecot with offset 2f and 100f respectively
         statsTextMesh.text =
