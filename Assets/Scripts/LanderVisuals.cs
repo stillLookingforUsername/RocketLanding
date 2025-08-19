@@ -11,6 +11,8 @@ public class LanderVisuals : MonoBehaviour
     [SerializeField] private ParticleSystem LeftThrusterParticles;
     [SerializeField] private ParticleSystem MiddleThrusterParticles;
     [SerializeField] private ParticleSystem RightThrusterParticles;
+    [SerializeField] private GameObject landerExplosionVFX;
+
 
     private Lander lander;
     private void Awake()
@@ -25,6 +27,26 @@ public class LanderVisuals : MonoBehaviour
         SetEnableThrusterParticleSystem(LeftThrusterParticles, false);
         SetEnableThrusterParticleSystem(MiddleThrusterParticles, false);
         SetEnableThrusterParticleSystem(RightThrusterParticles, false);
+    }
+
+    private void Start()
+    {
+        lander.OnLanded += Lander_OnLanded;
+    }
+
+    private void Lander_OnLanded(object sender, Lander.OnLandedEventArgs e)
+    {
+        switch (e.landingType)
+        {
+            case Lander.LandingType.WrongLandingArea:
+            case Lander.LandingType.TooFastLanding:
+            case Lander.LandingType.TooSteepAngle:
+                //crash
+                Instantiate(landerExplosionVFX,transform.position, Quaternion.identity);
+                gameObject.SetActive(false);
+                break;
+        }
+
     }
 
     //this method is used to turn off particles every FixedUpdate time

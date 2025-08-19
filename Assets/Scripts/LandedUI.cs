@@ -1,12 +1,20 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LandedUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI titleTextMesh;
     [SerializeField] private TextMeshProUGUI statsTextMesh;
+    [SerializeField] private Button nextButton;
 
+    //since this button is local to this Object we implement on Awake
+    private void Awake()
+    {
+        nextButton.onClick.AddListener(() => { SceneManager.LoadScene(0); }); //here we are listening to mouse click with code instead of using drag&drop in inspector
+    }
     /*
     private void Awake()
     {
@@ -15,7 +23,7 @@ public class LandedUI : MonoBehaviour
     */
     //never disable gameObject(here using Hide()) at Awake() as it will lead to not running Start()
     //which will again lead to not subscribing to the Onlanded Event (i.e., Lander.Instance.OnLanded += Lander_Onlanded)
-    
+
 
     //listening to the event OnLanded
     private void Start()

@@ -16,6 +16,11 @@ public class Lander : MonoBehaviour
     public event EventHandler OnRightForce;
     public event EventHandler OnBeforeForce;
     public event EventHandler OnCoinPickUp;
+    public event EventHandler<OnStateChangedEventArgs> OnStateChanged;
+    public class OnStateChangedEventArgs : EventArgs
+    {
+        public State state;
+    }
     public event EventHandler<OnLandedEventArgs> OnLanded;
     public class OnLandedEventArgs : EventArgs
     {
@@ -38,6 +43,7 @@ public class Lander : MonoBehaviour
     {
         WaitingToStart,
         Normal,
+        GameOver,
     }
     private Rigidbody2D _rb;
 
@@ -69,38 +75,40 @@ public class Lander : MonoBehaviour
                 {
                     //press anyInput
                     _rb.gravityScale = GRAVITY_NORMAL;
-                    state = State.Normal;
+                    SetState(State.Normal);
                 }
                 break;
             case State.Normal:
-                    if (fuelAmount <= 0f)
-                    {
-                        //No fuel
-                        return;
-                    }
-                    if (Keyboard.current.upArrowKey.isPressed || Keyboard.current.leftArrowKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
-                    {
-                        //press anyInput
-                        FuelConsumption();
-                    }
-                    if (Keyboard.current.upArrowKey.isPressed)
-                    {
-                        float force = 700f;
-                        _rb.AddForce(force * transform.up * Time.deltaTime); //we don't need deltaTime in fixedUpdate but just for unexpected error used it
-                        OnUpForce?.Invoke(this, EventArgs.Empty);
-                    }
-                    if (Keyboard.current.leftArrowKey.isPressed)
-                    {
-                        float turnSpeed = 200f;
-                        _rb.AddTorque(turnSpeed * Time.deltaTime);
-                        OnLeftForce?.Invoke(this, EventArgs.Empty);
-                    }
-                    if (Keyboard.current.rightArrowKey.isPressed)
-                    {
-                        float turnSpeed = -200f;
-                        _rb.AddTorque(turnSpeed * Time.deltaTime);
-                        OnRightForce?.Invoke(this, EventArgs.Empty);
-                    }
+                if (fuelAmount <= 0f)
+                {
+                    //No fuel
+                    return;
+                }
+                if (Keyboard.current.upArrowKey.isPressed || Keyboard.current.leftArrowKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+                {
+                    //press anyInput
+                    FuelConsumption();
+                }
+                if (Keyboard.current.upArrowKey.isPressed)
+                {
+                    float force = 700f;
+                    _rb.AddForce(force * transform.up * Time.deltaTime); //we don't need deltaTime in fixedUpdate but just for unexpected error used it
+                    OnUpForce?.Invoke(this, EventArgs.Empty);
+                }
+                if (Keyboard.current.leftArrowKey.isPressed)
+                {
+                    float turnSpeed = 200f;
+                    _rb.AddTorque(turnSpeed * Time.deltaTime);
+                    OnLeftForce?.Invoke(this, EventArgs.Empty);
+                }
+                if (Keyboard.current.rightArrowKey.isPressed)
+                {
+                    float turnSpeed = -200f;
+                    _rb.AddTorque(turnSpeed * Time.deltaTime);
+                    OnRightForce?.Invoke(this, EventArgs.Empty);
+                }
+                break;
+            case State.GameOver:
                 break;
         }
     }
@@ -117,6 +125,7 @@ public class Lander : MonoBehaviour
                 scoreMultiplier = 0,
                 score = 0,
             });
+            SetState(State.GameOver);
             return;
         }
         float softLandingVelocityMagnitude = 4f;
@@ -133,6 +142,7 @@ public class Lander : MonoBehaviour
                 scoreMultiplier = landingPad.GetScoreMultiplier(),
                 score = 0,
             });
+            SetState(State.GameOver);
             return;
         }
         //we are going to compare the dot product of Global Vector & Local Vector(of the gameObject).
@@ -151,6 +161,7 @@ public class Lander : MonoBehaviour
                 scoreMultiplier = landingPad.GetScoreMultiplier(),
                 score = 0,
             });
+            SetState(State.GameOver);
             return;
         }
         Debug.Log("Soft Landing");
@@ -175,6 +186,7 @@ public class Lander : MonoBehaviour
             scoreMultiplier = landingPad.GetScoreMultiplier(),
             score = score,
         });
+        SetState(State.GameOver);
     }
 
 
@@ -200,6 +212,12 @@ public class Lander : MonoBehaviour
             coinPickUp.DestroySelf();
         }
 
+    }
+    //helper function
+    private void SetState(State state)
+    {
+        this.state = state;
+        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs { state = state });
     }
 
     //Optional - use parameter to dictate how much fuel to be consumed
@@ -227,3 +245,13 @@ public class Lander : MonoBehaviour
         return fuelAmount;
     }
 }
+
+/*
+public event → This declares an event. Other scripts can subscribe to it, so they get notified when it happens.
+
+EventHandler<OnStateChangedEventArgs> → This is the type of the event.
+
+EventHandler<T> is a built-in delegate in C#.
+
+The <OnStateChangedEventArgs> means the event will pass an argument of type OnStateChangedEventArgs to subscribers.
+*/
