@@ -378,6 +378,7 @@ Transform:
   - {fileID: 2377917901140432264}
   - {fileID: 296689437175206191}
   - {fileID: 2304584328506217702}
+  - {fileID: 8361769749037290755}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &-6306425577048820134
@@ -394,6 +395,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _levelNumber: 2
   _landerStartPositionTransform: {fileID: 2304584328506217702}
+  _cameraStartTargetTransform: {fileID: 8361769749037290755}
+  _zoomOutOrthographicSize: 20
+--- !u!1 &8086016167900999081
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8361769749037290755}
+  m_Layer: 0
+  m_Name: CameraStartTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8361769749037290755
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8086016167900999081}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 6.4, y: 7.2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8564999304762944572}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &517831881578313625
 PrefabInstance:
   m_ObjectHideFlags: 0

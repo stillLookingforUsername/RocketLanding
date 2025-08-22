@@ -4,6 +4,8 @@ public class GameLevel : MonoBehaviour
 {
     [SerializeField] private int _levelNumber;
     [SerializeField] private Transform _landerStartPositionTransform;
+    [SerializeField] private Transform _cameraStartTargetTransform;
+    [SerializeField] private float _zoomOutOrthographicSize;
 
     //function to expose the above data
 
@@ -15,5 +17,14 @@ public class GameLevel : MonoBehaviour
     {
         return _landerStartPositionTransform.position;
     }
-  
+
+    public Transform GetCameraStartTargetTransform()
+    {
+        return _cameraStartTargetTransform;
+    }
+
+    public float GetZoomOutOrthographicSize()
+    {
+        return _zoomOutOrthographicSize;
+    }
 }
