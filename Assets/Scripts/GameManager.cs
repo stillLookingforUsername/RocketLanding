@@ -14,6 +14,12 @@ public class GameManager : MonoBehaviour
     //private static int _levelNumber; //this is one of the problem why the level was not loading cuz we didn't initialize the value and it take random number which is not valid
 
     //public static int _levelNumber;
+
+    public static void ResetStaticData()
+    {
+        _levelNumber = 1;
+        _totalScore = 0;
+    }
     [SerializeField] private List<GameLevel> _gameLevelList; //to keep track of levels
     [SerializeField] private CinemachineCamera _cinemachineCamera; //to keep track of levels
 

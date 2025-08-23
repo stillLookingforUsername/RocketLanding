@@ -11,6 +11,7 @@ public class MainMenuUI : MonoBehaviour
     {
         _playButton.onClick.AddListener(() =>
         {
+            GameManager.ResetStaticData();
             SceneLoader.LoadScene(SceneLoader.Scene.GameScene); //eg: here if we miss type the scene name we will get error
         });
         _quitButton.onClick.AddListener(() =>
