@@ -71,7 +71,7 @@ public class Lander : MonoBehaviour
         {
             default:
             case State.WaitingToStart:
-                if (GameInputs.Instance.IsUpActionPressed() || GameInputs.Instance.IsRightActionPressed() || GameInputs.Instance.IsLeftActionPressed())
+                if (GameInputs.Instance.IsUpActionPressed() || GameInputs.Instance.IsRightActionPressed() || GameInputs.Instance.IsLeftActionPressed() || GameInputs.Instance.GetMovementInputVector2() != Vector2.zero)
                 {
                     //press anyInput
                     _rb.gravityScale = GRAVITY_NORMAL;
@@ -84,24 +84,25 @@ public class Lander : MonoBehaviour
                     //No fuel
                     return;
                 }
-                if (GameInputs.Instance.IsUpActionPressed() || GameInputs.Instance.IsRightActionPressed() || GameInputs.Instance.IsLeftActionPressed())
+                if (GameInputs.Instance.IsUpActionPressed() || GameInputs.Instance.IsRightActionPressed() || GameInputs.Instance.IsLeftActionPressed() || GameInputs.Instance.GetMovementInputVector2() != Vector2.zero)
                 {
                     //press anyInput
                     FuelConsumption();
                 }
-                if (GameInputs.Instance.IsUpActionPressed())
+                float gamepadDeadZone = .4f;
+                if (GameInputs.Instance.IsUpActionPressed() || GameInputs.Instance.GetMovementInputVector2().y > gamepadDeadZone)
                 {
                     float force = 700f;
                     _rb.AddForce(force * transform.up * Time.deltaTime); //we don't need deltaTime in fixedUpdate but just for unexpected error used it
                     OnUpForce?.Invoke(this, EventArgs.Empty);
                 }
-                if (GameInputs.Instance.IsLeftActionPressed())
+                if (GameInputs.Instance.IsLeftActionPressed() || GameInputs.Instance.GetMovementInputVector2().x < -gamepadDeadZone)
                 {
                     float turnSpeed = 200f;
                     _rb.AddTorque(turnSpeed * Time.deltaTime);
                     OnLeftForce?.Invoke(this, EventArgs.Empty);
                 }
-                if (GameInputs.Instance.IsRightActionPressed())
+                if (GameInputs.Instance.IsRightActionPressed() || GameInputs.Instance.GetMovementInputVector2().x > gamepadDeadZone)
                 {
                     float turnSpeed = -200f;
                     _rb.AddTorque(turnSpeed * Time.deltaTime);

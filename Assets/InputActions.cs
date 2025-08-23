@@ -53,6 +53,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Movement"",
+                    ""type"": ""Value"",
+                    ""id"": ""da2b310b-d784-497e-93c2-5f4d78f3c67a"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -121,6 +130,17 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""LanderRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b6a465e-6f07-4670-9005-195d445fa551"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -132,6 +152,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_Player_LanderUp = m_Player.FindAction("LanderUp", throwIfNotFound: true);
         m_Player_LanderLeft = m_Player.FindAction("LanderLeft", throwIfNotFound: true);
         m_Player_LanderRight = m_Player.FindAction("LanderRight", throwIfNotFound: true);
+        m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
     }
 
     ~@InputActions()
@@ -201,6 +222,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_LanderUp;
     private readonly InputAction m_Player_LanderLeft;
     private readonly InputAction m_Player_LanderRight;
+    private readonly InputAction m_Player_Movement;
     public struct PlayerActions
     {
         private @InputActions m_Wrapper;
@@ -208,6 +230,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         public InputAction @LanderUp => m_Wrapper.m_Player_LanderUp;
         public InputAction @LanderLeft => m_Wrapper.m_Player_LanderLeft;
         public InputAction @LanderRight => m_Wrapper.m_Player_LanderRight;
+        public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -226,6 +249,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @LanderRight.started += instance.OnLanderRight;
             @LanderRight.performed += instance.OnLanderRight;
             @LanderRight.canceled += instance.OnLanderRight;
+            @Movement.started += instance.OnMovement;
+            @Movement.performed += instance.OnMovement;
+            @Movement.canceled += instance.OnMovement;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -239,6 +265,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @LanderRight.started -= instance.OnLanderRight;
             @LanderRight.performed -= instance.OnLanderRight;
             @LanderRight.canceled -= instance.OnLanderRight;
+            @Movement.started -= instance.OnMovement;
+            @Movement.performed -= instance.OnMovement;
+            @Movement.canceled -= instance.OnMovement;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -261,5 +290,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         void OnLanderUp(InputAction.CallbackContext context);
         void OnLanderLeft(InputAction.CallbackContext context);
         void OnLanderRight(InputAction.CallbackContext context);
+        void OnMovement(InputAction.CallbackContext context);
     }
 }
