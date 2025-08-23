@@ -1,16 +1,33 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameInputs : MonoBehaviour
 {
     public static GameInputs Instance { get; private set; }
     private InputActions _inputActions;
+    public event EventHandler OnMenuButtonPressed;
 
     private void Awake()
     {
         Instance = this;
         _inputActions = new InputActions();
         _inputActions.Enable(); //we must need to enable the inputActions otherwise it's won't work
+
+        _inputActions.Player.Menu.performed += Menu_performed;
     }
+
+    /*
+    private void Menu_performed(InputAction.CallbackContext context)
+    {
+        OnMenuButtonPressed?.Invoke(this, EventArgs.Empty);
+    }
+    */
+    private void Menu_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        OnMenuButtonPressed?.Invoke(this, EventArgs.Empty);
+    }
+
     public void OnDestroy()
     {
         _inputActions.Disable();

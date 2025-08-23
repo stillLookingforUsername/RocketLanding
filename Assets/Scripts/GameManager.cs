@@ -10,11 +10,16 @@ public class GameManager : MonoBehaviour
 
     //[SerializeField]private int _levelNumber;
     private static int _levelNumber = 1;
+    private static int _totalScore = 0;
     //private static int _levelNumber; //this is one of the problem why the level was not loading cuz we didn't initialize the value and it take random number which is not valid
 
     //public static int _levelNumber;
     [SerializeField] private List<GameLevel> _gameLevelList; //to keep track of levels
     [SerializeField] private CinemachineCamera _cinemachineCamera; //to keep track of levels
+
+    public event EventHandler OnGamePaused;
+    public event EventHandler OnGameUnPaused;
+
 
     private int score;
     private float time;
@@ -31,7 +36,13 @@ public class GameManager : MonoBehaviour
         Lander.Instance.OnLanded += Lander_OnLanded;
         Lander.Instance.OnStateChanged += Lander_OnStateChanged;
 
+        GameInputs.Instance.OnMenuButtonPressed += GameInputs_OnMenuButtonPressed;
         LoadCurrentLevel();
+    }
+
+    private void GameInputs_OnMenuButtonPressed(object sender, EventArgs e)
+    {
+        PauseUnpauseGame();
     }
 
     private void Lander_OnStateChanged(object sender, Lander.OnStateChangedEventArgs e)
@@ -46,17 +57,22 @@ public class GameManager : MonoBehaviour
     }
     private void LoadCurrentLevel()
     {
+        GameLevel gameLevel = GetGameLevel();
+        GameLevel spawnGameLevel = Instantiate(gameLevel, Vector3.zero, Quaternion.identity);
+        Lander.Instance.transform.position = spawnGameLevel.GetLevelStartPosition();
+        _cinemachineCamera.Target.TrackingTarget = spawnGameLevel.GetCameraStartTargetTransform();
+        CinemachineCameraZoom2D.Instance.SetOrthographicSize(spawnGameLevel.GetZoomOutOrthographicSize());
+    }
+    private GameLevel GetGameLevel()
+    {
         foreach (GameLevel gameLevel in _gameLevelList)
         {
             if (gameLevel.GetLevelNumber() == _levelNumber)
             {
-                GameLevel spawnGameLevel = Instantiate(gameLevel, Vector3.zero, Quaternion.identity);
-                Lander.Instance.transform.position = spawnGameLevel.GetLevelStartPosition();
-                _cinemachineCamera.Target.TrackingTarget = spawnGameLevel.GetCameraStartTargetTransform();
-                CinemachineCameraZoom2D.Instance.SetOrthographicSize(spawnGameLevel.GetZoomOutOrthographicSize());
+                return gameLevel;
             }
         }
-
+        return null;
     }
 
     private void Update()
@@ -92,10 +108,24 @@ public class GameManager : MonoBehaviour
     {
         return time;
     }
+    public int GetTotalScore()
+    {
+        return _totalScore;
+    }
     public void GoToNextLevel()
     {
         _levelNumber++;
-        SceneLoader.LoadScene(SceneLoader.Scene.GameScene);
+        _totalScore += score;
+        if (GetGameLevel() == null)
+        {
+            //No more Level
+            SceneLoader.LoadScene(SceneLoader.Scene.GameOverScene);
+        }
+        else
+        {
+            //we still have more levels
+            SceneLoader.LoadScene(SceneLoader.Scene.GameScene);
+        }
     }
     public void RetryLevel()
     {
@@ -104,5 +134,26 @@ public class GameManager : MonoBehaviour
     public int GetLevelNumber()
     {
         return _levelNumber;
+    }
+    public void PauseGame()
+    {
+        Time.timeScale = 0f;
+        OnGamePaused?.Invoke(this, EventArgs.Empty);
+    }
+    public void UnpauseGame()
+    {
+        Time.timeScale = 1f;
+        OnGameUnPaused?.Invoke(this, EventArgs.Empty);
+    }
+    public void PauseUnpauseGame()
+    {
+        if (Time.timeScale == 1f)
+        {
+            PauseGame();
+        }
+        else
+        {
+            UnpauseGame();
+        }
     }
 }
