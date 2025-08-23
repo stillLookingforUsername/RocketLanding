@@ -71,7 +71,7 @@ public class Lander : MonoBehaviour
         {
             default:
             case State.WaitingToStart:
-                if (Keyboard.current.upArrowKey.isPressed || Keyboard.current.leftArrowKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+                if (GameInputs.Instance.IsUpActionPressed() || GameInputs.Instance.IsRightActionPressed() || GameInputs.Instance.IsLeftActionPressed())
                 {
                     //press anyInput
                     _rb.gravityScale = GRAVITY_NORMAL;
@@ -84,24 +84,24 @@ public class Lander : MonoBehaviour
                     //No fuel
                     return;
                 }
-                if (Keyboard.current.upArrowKey.isPressed || Keyboard.current.leftArrowKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+                if (GameInputs.Instance.IsUpActionPressed() || GameInputs.Instance.IsRightActionPressed() || GameInputs.Instance.IsLeftActionPressed())
                 {
                     //press anyInput
                     FuelConsumption();
                 }
-                if (Keyboard.current.upArrowKey.isPressed)
+                if (GameInputs.Instance.IsUpActionPressed())
                 {
                     float force = 700f;
                     _rb.AddForce(force * transform.up * Time.deltaTime); //we don't need deltaTime in fixedUpdate but just for unexpected error used it
                     OnUpForce?.Invoke(this, EventArgs.Empty);
                 }
-                if (Keyboard.current.leftArrowKey.isPressed)
+                if (GameInputs.Instance.IsLeftActionPressed())
                 {
                     float turnSpeed = 200f;
                     _rb.AddTorque(turnSpeed * Time.deltaTime);
                     OnLeftForce?.Invoke(this, EventArgs.Empty);
                 }
-                if (Keyboard.current.rightArrowKey.isPressed)
+                if (GameInputs.Instance.IsRightActionPressed())
                 {
                     float turnSpeed = -200f;
                     _rb.AddTorque(turnSpeed * Time.deltaTime);
