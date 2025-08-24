@@ -16,6 +16,7 @@ public class Lander : MonoBehaviour
     public event EventHandler OnRightForce;
     public event EventHandler OnBeforeForce;
     public event EventHandler OnCoinPickUp;
+    public event EventHandler OnFuelPickUp;
     public event EventHandler<OnStateChangedEventArgs> OnStateChanged;
     public class OnStateChangedEventArgs : EventArgs
     {
@@ -204,6 +205,7 @@ public class Lander : MonoBehaviour
                 //fuel will go up only till max it won't keep on incrementing
                 fuelAmount = fuelAmountMax;
             }
+            OnFuelPickUp?.Invoke(this, EventArgs.Empty);
             fuelPickup.DestroySelf();
         }
 
