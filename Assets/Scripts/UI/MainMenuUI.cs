@@ -17,6 +17,11 @@ public class MainMenuUI : MonoBehaviour
         _quitButton.onClick.AddListener(() =>
         {
             Application.Quit();
-         });
+        });
+    }
+
+    private void Start()
+    {
+        _playButton.Select();
     }
 }

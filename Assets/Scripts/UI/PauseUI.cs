@@ -23,6 +23,7 @@ public class PauseUI : MonoBehaviour
     {
         GameManager.Instance.OnGamePaused += GameManager_OnGamePaused;
         GameManager.Instance.OnGameUnPaused += GameManager_OnGameUnPaused;
+        _resumeButton.Select();
     }
 
     private void GameManager_OnGameUnPaused(object sender, EventArgs e)

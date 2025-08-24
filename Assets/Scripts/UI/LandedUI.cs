@@ -31,6 +31,7 @@ public class LandedUI : MonoBehaviour
     private void Start()
     {
         Lander.Instance.OnLanded += Lander_OnLanded;
+        nextButton.Select();
         Hide();
     }
 

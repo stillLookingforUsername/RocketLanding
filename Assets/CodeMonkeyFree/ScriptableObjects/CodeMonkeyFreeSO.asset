@@ -14,20 +14,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentVersion: 1.00
   subtype: lunarLanderFree
-  lastShownTimestamp: 1755869808
+  lastShownTimestamp: 1755958492
   lastUpdateResponse:
     version: 1.00
     versionUrl: https://unitycodemonkey.com
-  checkedLastUpdateTimestamp: 1755869808
+  checkedLastUpdateTimestamp: 1755958493
   lastQOTDResponse:
-    questionId: 213
-    questionText: What is the purpose of a namespace?
-    answerA: To confuse you
-    answerB: Better performance
-    answerC: Keep your code organized
+    questionId: 214
+    questionText: 'What is the position of the transform after running this code?
+
+      <p>Vector3
+      targetPosition = new Vector3(10, 0, 0);</p>
+
+      <p>transform.position =
+      targetPosition;</p>
+
+      <p>targetPosition.x = 20;</p>'
+    answerA: (10, 0, 0)
+    answerB: (20, 0, 0)
+    answerC: Unknown
     answerD: 
     answerE: 
-  lastQotdTimestamp: 1755869808
+  lastQotdTimestamp: 1755958493
   lastDynamicHeaderResponse:
     topImageUrl: https://codemonkeyexternal.blob.core.windows.net/external/Misc/summer2025CodeMonkeyBundle_EndsSoon.png
     topText: All my Courses (and Games) in one Bundle! DEEP DISCOUNT ONLY THIS SUMMER!
@@ -35,11 +43,11 @@ MonoBehaviour:
     bottomText: Get my Code Monkey Toolkit and make games BETTER and FASTER! 50%
       OFF right now!
     bottomLink: toolkit
-  lastDynamicHeaderTimestamp: 1755869808
+  lastDynamicHeaderTimestamp: 1755958493
   websiteLatestMessage:
     text: <a href="https://cmonkey.co/freecourses">Check out all my FREE courses!
       Click here!</a>
-  websiteLatestMessageTimestamp: 1755869808
+  websiteLatestMessageTimestamp: 1755958493
   websiteLatestVideos:
     videos:
     - youTubeId: Lgmv7PYKka8
@@ -50,4 +58,4 @@ MonoBehaviour:
       title: Did I STOP making TUTORIALS?
     - youTubeId: XJsidUVPOCY
       title: TOP 10 NEW Games, Made with Unity! (JULY 2025)
-  websiteLatestVideosTimestamp: 1755869808
+  websiteLatestVideosTimestamp: 1755958493
